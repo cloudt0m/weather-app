@@ -3,7 +3,7 @@
     <location-select
       :locationNames="locationNames"
       :currentLocation="currentLocation"
-      @select="getLocation($event); getWeatherData(currentLocation)"
+      @select="getWeatherData($event)"
     ></location-select>
     <p>地區：{{ currentLocation }}</p>
     <p>天氣：{{ weather }}</p>
@@ -56,9 +56,6 @@ import axios from "axios";
     };
   },
   methods: {
-    getLocation(location: string) {
-      this.currentLocation = location;
-    },
     getMyPosition() {
       const apiKey = process.env.VUE_APP_GOOGLE_API_KEY;
       const endpoint = "https://maps.google.com/maps/api/geocode/json";
@@ -96,7 +93,10 @@ import axios from "axios";
                 cityName = cityName.replace(/\u53F0/, "\u81FA");
               }
 
-              this.getWeatherData(cityName);
+              // get weather data from geolocation when no location selected
+              if (this.currentLocation == "") {
+                this.getWeatherData(cityName);
+              }
             })
             .catch((error) => console.error(`google geo api error: ${error}`));
         })
@@ -107,6 +107,7 @@ import axios from "axios";
       const endpoint =
         "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091";
       const elementNames = ["MaxT", "MinT", "PoP12h", "Wx"];
+      this.currentLocation = location;
 
       const filterItem = (data: Array<any>, fieldName: string) => {
         const fieldData = data.filter((el) => el.elementName == fieldName)[0]
