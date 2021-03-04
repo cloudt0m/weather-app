@@ -24,27 +24,25 @@
 import { Vue, Options } from "vue-class-component";
 
 @Options({
-  data() {
-    return {
-      selectedLocation: "",
-    };
-  },
   props: {
     locationNames: Array,
-    currentLocation: String
+    currentLocation: String,
   },
   emits: ["select"],
-  methods: {
-    selectLocation(location: string) {
-      this.selectedLocation = location;
-      this.$emit("select", location);
-    },
-  },
-  mounted: function() {
+})
+export default class LocationSelect extends Vue {
+  currentLocation!: string;  
+  selectedLocation = "";
+
+  selectLocation(location: string) {
+    this.selectedLocation = location;
+    this.$emit("select", location);
+  }
+
+  mounted() {
     this.selectedLocation = this.currentLocation;
   }
-})
-export default class LocationSelect extends Vue {}
+}
 </script>
 
 <style scoped lang="scss">
