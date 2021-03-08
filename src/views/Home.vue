@@ -125,6 +125,13 @@ export default class Home extends Vue {
     const filterItem = (data: Array<any>, fieldName: string) => {
       const fieldData = data.filter((el) => el.elementName == fieldName)[0]
         .time[0].elementValue[0].value;
+      // get Wx ID from elementValue
+      if (fieldName == "Wx") {
+        const weatherIdData = data.filter(
+          (el) => el.elementName == fieldName
+        )[0].time[0].elementValue[1].value;
+        return { Wx: fieldData, WxID: weatherIdData };
+      }
       return fieldData;
     };
     const filterWeeklyItems = (data: Array<any>, elementNames: string[]) => {
@@ -152,12 +159,21 @@ export default class Home extends Vue {
           })
           .map((el: any) => {
             const obj: any = {};
-            obj[fieldName] = el.elementValue[0].value;
             const time = moment(el.startTime).format("MM/DD");
-            return {
-              time,
-              ...obj,
-            };
+            obj[fieldName] = el.elementValue[0].value;
+
+            if (fieldName == "Wx") {
+              return {
+                time,
+                Wx: el.elementValue[0].value,
+                WxID: el.elementValue[1].value,
+              };
+            } else {
+              return {
+                time,
+                ...obj,
+              };
+            }
           });
         return filteredData;
       });
