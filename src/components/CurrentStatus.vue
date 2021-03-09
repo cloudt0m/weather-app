@@ -1,10 +1,21 @@
 <template>
-  <div>
-    <p>地區：{{ location }}</p>
-    <p>天氣：{{ weatherData.weather.Wx }}</p>
-    <p>溫度：{{ weatherData.temperature }} <span v-if="weatherData.temperature">℃</span></p>
-    <p>降雨機率：{{ weatherData.precipitationRate }} <span v-if="weatherData.precipitationRate"> %</span></p>
-    <p>風速：{{ weatherData.windSpeed }} <span v-if="weatherData.windSpeed"> m/s</span></p>
+  <div class="current">
+    <img
+      class="current-icon"
+      src=""
+      alt=""
+    >
+    <div class="current-information">
+      <h2 class="current-temperature">{{ weatherData.temperature }} <span v-if="weatherData.temperature">℃</span></h2>
+      <h3 class="current-status">{{ weatherData.weather.weather }}</h3>
+      <h3 class="current-status">氣象代碼：{{ weatherData.weather.weatherCode }}</h3>
+      <p class="current-time">2021年10月30日 周四</p>
+      <div class="current-others">
+        <p class="current-precipitation">{{ weatherData.precipitationRate }}</p>
+        <p class="current-wind-speed">{{ weatherData.windSpeed }} <span v-if="weatherData.windSpeed"> m/s</span></p>
+      </div>
+    </div>
+
 
   </div>
 </template>
@@ -43,5 +54,31 @@ export default class CurrentStatus extends Vue {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.current {
+  &-icon {
+
+  }
+  &-information {
+
+  }
+  &-temperature {
+
+  }
+  &-status {
+
+  }
+  &-time {
+
+  }
+  &-others {
+
+  }
+  &-precipitation {
+
+  }
+  &-wind-speed {
+
+  }
+}
 </style>

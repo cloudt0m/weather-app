@@ -2,13 +2,14 @@
   <div>
     <h1>一週天氣</h1>
     <div v-for="(data, index) in weeklyWeather" :key="index">
-      <p>日期：{{ data.time }} 氣象：{{ data.Wx }} 氣溫：{{ data.T }}C</p>
+      <p>日期：{{ data.time }} 氣象：{{ data.weather }} 氣溫：{{ data.temperature }}℃</p>
     </div>
 
   </div>
 </template>
 
 <script lang="ts">
+import { WeatherData } from "@/types";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -20,7 +21,7 @@ import { Options, Vue } from "vue-class-component";
   },
 })
 export default class WeeklyStatus extends Vue {
-  weeklyWeather: any[] = [];
+  weeklyWeather: WeatherData[] = [];
 }
 </script>
 
