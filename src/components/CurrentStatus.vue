@@ -2,7 +2,7 @@
   <div class="current">
     <img
       class="current-icon"
-      src=""
+      :src="'images/icons/status-' + weatherData.weatherCode + '.svg'"
       alt=""
     >
     <div class="current-information">
@@ -11,11 +11,10 @@
       <h3 class="current-status">氣象代碼：{{ weatherData.weatherCode }}</h3>
       <p class="current-time">2021年10月30日 周四</p>
       <div class="current-others">
-        <p class="current-precipitation">{{ weatherData.precipitationRate }}</p>
-        <p class="current-wind-speed">{{ weatherData.windSpeed }} <span v-if="weatherData.windSpeed"> m/s</span></p>
+        <p class="current-precipitation">降雨機率：{{ weatherData.precipitationRate }} %</p>
+        <p class="current-wind-speed">風速：{{ weatherData.windSpeed }} <span v-if="weatherData.windSpeed"> m/s</span></p>
       </div>
     </div>
-
 
   </div>
 </template>
@@ -57,28 +56,20 @@ export default class CurrentStatus extends Vue {
 <style scoped lang="scss">
 .current {
   &-icon {
-
   }
   &-information {
-
   }
   &-temperature {
-
   }
   &-status {
-
   }
   &-time {
-
   }
   &-others {
-
   }
   &-precipitation {
-
   }
   &-wind-speed {
-
   }
 }
 </style>

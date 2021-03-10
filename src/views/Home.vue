@@ -83,3 +83,10 @@ export default class Home extends Vue {
   }
 }
 </script>
+<style lang="scss" scoped>
+@import '@/assets/scss/style';
+
+.home {
+  background-color: $clear-bg;
+}
+</style>
