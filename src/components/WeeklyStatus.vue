@@ -2,7 +2,7 @@
   <div>
     <h1>一週天氣</h1>
     <div v-for="(data, index) in weeklyWeather" :key="index">
-      <p>日期：{{ data.time }} 氣象：{{ data.weather }} 氣溫：{{ data.temperature }}℃</p>
+      <p>日期：{{ data.time }} 氣象：{{ data.weatherCode }} 氣溫：{{ data.temperature }}℃</p>
     </div>
 
   </div>

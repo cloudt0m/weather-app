@@ -1,4 +1,11 @@
-import { PositionData, CWBTime, CurrentWeather, WeatherData } from '@/types';
+import {
+  CWBData,
+  WeeklyWeather,
+  PositionData,
+  CWBTime,
+  CurrentWeather,
+  WeatherData,
+} from '@/types';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -49,82 +56,79 @@ export default {
     const endpoint =
       'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091';
     const elementNames = ['T', 'WS', 'PoP12h', 'Wx'];
-    const filterItem = (data: Array<any>, fieldName: string) => {
+    const filterItem = (
+      data: Array<CWBData>,
+      fieldName: string,
+      weatherOption?: string
+    ) => {
       const fieldData = data.filter((el) => el.elementName == fieldName)[0]
         .time[0].elementValue[0].value;
       // get Wx ID from elementValue
       if (fieldName == 'Wx') {
-        const weatherIdData = data.filter(
-          (el) => el.elementName == fieldName
-        )[0].time[0].elementValue[1].value;
-        return { weather: fieldData, weatherCode: weatherIdData };
+        if (weatherOption == 'code') {
+          return data.filter((el) => el.elementName == fieldName)[0].time[0]
+            .elementValue[1].value;
+        } else {
+          return fieldData;
+        }
       }
       return fieldData;
     };
-    const filterWeeklyItems = (data: Array<any>, elementNames: string[]) => {
+    const filterWeeklyItems = (
+      data: Array<CWBData>,
+      elementNames: string[]
+    ) => {
       const today = moment().format('MM/DD');
       const fieldData = elementNames.map((fieldName) => {
-        const filteredData: any[] = data
+        const filteredData: WeeklyWeather[] = data
           .filter((el) => el.elementName == fieldName)[0]
-          .time.reduce(
-            (
-              prev: CWBTime[],
-              curr: CWBTime,
-              index: number,
-              array: CWBTime[]
-            ) => {
-              const time = moment(curr.startTime).format('MM/DD');
+          .time.filter((el: CWBTime, index: number, array: CWBTime[]) => {
+            const time = moment(el.startTime).format('MM/DD');
+
+            // remove today and duplicate date entry
+            if (index > 1 && time != today) {
               const prevTime = moment(array[index - 1].startTime).format(
                 'MM/DD'
               );
-
-              // remove today and duplicate date entry
-              if (index > 1) {
-                if (time != today && time != prevTime) {
-                  // push current object to prev array
-                  return [...prev, curr];
-                } else {
-                  // not push current object
-                  return prev;
-                }
+              if (time != prevTime) {
+                // push current object to prev array
+                return true;
               } else {
-                // skip first iteration with undefined prev
-                return [];
+                // not push current object
+                return false;
               }
+            } else {
+              // skip first iteration with undefined prevTime
+              return false;
             }
-          )
+          })
           .map((el: CWBTime) => {
-            const obj: any = {};
+            const obj: { [key: string]: string } = {};
             const time = moment(el.startTime).format('MM/DD');
-            let convertedName = '';
+            const value = el.elementValue[0].value;
+            
             switch (fieldName) {
               case 'T':
-                convertedName = 'temperature';
+                obj.temperature = value;
                 break;
               case 'WS':
-                convertedName = 'windSpeed';
+                obj.windSpeed = value;
                 break;
               case 'PoP12h':
-                convertedName = 'precipitationRate';
+                obj.precipitationRate = value;
+                break;
+              case 'Wx':
+                obj.weatherCode = el.elementValue[1].value;
                 break;
               default:
-                convertedName = fieldName;
+                obj[fieldName] = value;
                 break;
             }
-            obj[convertedName] = el.elementValue[0].value;
 
-            if (fieldName == 'Wx') {
-              return {
-                time,
-                weather: el.elementValue[0].value,
-                weatherCode: el.elementValue[1].value,
-              };
-            } else {
-              return {
-                time,
-                ...obj,
-              };
-            }
+            return {
+              time,
+              ...obj,
+            };
           });
         return filteredData;
       });
@@ -150,7 +154,8 @@ export default {
           res.data.records.locations[0].location[0].weatherElement;
         const weeklyWeather = filterWeeklyItems(weatherData, elementNames);
         const currentWeather = {} as CurrentWeather;
-        currentWeather.weather = filterItem(weatherData, 'Wx');
+        currentWeather.weather = filterItem(weatherData, 'Wx', 'description');
+        currentWeather.weatherCode = filterItem(weatherData, 'Wx', 'code');
         currentWeather.temperature = filterItem(weatherData, 'T');
         currentWeather.precipitationRate = filterItem(weatherData, 'PoP12h');
         currentWeather.windSpeed = filterItem(weatherData, 'WS');

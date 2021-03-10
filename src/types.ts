@@ -6,8 +6,9 @@ export interface CurrentWeather {
   windSpeed: string;
 }
 
-export interface WeeklyWeather extends CurrentWeather {
+export interface WeeklyWeather {
   time: string;
+  [key: string]: string;
 }
 
 export interface WeatherData {

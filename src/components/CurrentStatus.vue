@@ -7,8 +7,8 @@
     >
     <div class="current-information">
       <h2 class="current-temperature">{{ weatherData.temperature }} <span v-if="weatherData.temperature">℃</span></h2>
-      <h3 class="current-status">{{ weatherData.weather.weather }}</h3>
-      <h3 class="current-status">氣象代碼：{{ weatherData.weather.weatherCode }}</h3>
+      <h3 class="current-status">{{ weatherData.weather }}</h3>
+      <h3 class="current-status">氣象代碼：{{ weatherData.weatherCode }}</h3>
       <p class="current-time">2021年10月30日 周四</p>
       <div class="current-others">
         <p class="current-precipitation">{{ weatherData.precipitationRate }}</p>
