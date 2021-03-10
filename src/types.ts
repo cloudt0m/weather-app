@@ -17,11 +17,8 @@ export interface WeatherData {
 }
 
 export interface PositionData {
-  address_components: any[];
   formatted_address: string;
-  geometry: any;
   place_id: string;
-  plus_code: any;
   types: string[];
 }
 
@@ -31,7 +28,6 @@ export interface CWBValue {
 }
 
 export interface CWBTime {
-  map(arg0: (el: any) => any): any[];
   startTime: string;
   endTime: string;
   elementValue: CWBValue[];
