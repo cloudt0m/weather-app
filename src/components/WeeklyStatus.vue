@@ -1,10 +1,23 @@
 <template>
-  <div>
-    <h1>一週天氣</h1>
-    <div v-for="(data, index) in weeklyWeather" :key="index">
-      <p>日期：{{ data.time }} 氣象：{{ data.weatherCode }} 氣溫：{{ data.temperature }}℃</p>
+  <div class="weekly relative flex md:flex-col md:min-h-full w-full md:w-auto h-1/3 md:h-full">
+    <div
+      v-for="(data, index) in weeklyWeather"
+      :key="index"
+      class="weekly-item flex flex-col md:flex-row flex-1 py-6 md:py-0 md:px-6 border-l-2 border-r-2 md:border-l-0 md:border-r-0 md:border-t-2 md:border-b-2 md:items-center md:justify-between h-full"
+    >
+      <div class="weekly-item__time text-center text-lg">{{ data.time }}</div>
+      <div class="weekly-item__weather-icon flex justify-center items-center h-1/2 md:w-24">
+        <img
+          :src="'images/icons/status-' + data.weatherCode + '.svg'"
+          class="w-16 h-16"
+          alt=""
+        >
+      </div>
+      <div class="weekly-item__temperature text-center text-3xl font-medium">
+        <p class="">{{ data.temperature }}</p>
+      </div>
+      <div class="weekly-item__unit text-center">℃</div>
     </div>
-
   </div>
 </template>
 
@@ -25,5 +38,15 @@ export default class WeeklyStatus extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/scss/style";
+
+.weekly {
+  min-height: 12rem;
+}
+.weekly-item {
+  background-color: $clear-block;
+  color: $clear-text;
+  border-color: $clear-bg;
+}
 </style>
