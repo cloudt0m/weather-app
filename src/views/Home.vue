@@ -1,5 +1,5 @@
 <template>
-  <div class="home w-full h-full flex flex-col md:flex-row md:justify-center">
+  <div class="home">
     <location-select
       :locationNames="locationNames"
       :currentLocation="currentLocation"
@@ -88,6 +88,6 @@ export default class Home extends Vue {
 
 .home {
   background-color: $clear-bg;
-  position: relative;
+  @apply relative w-full h-full flex flex-col md:flex-row md:justify-center;
 }
 </style>

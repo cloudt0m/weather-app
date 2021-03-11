@@ -1,10 +1,9 @@
 <template>
-  <div class="w-full absolute flex justify-center p-6">
+  <div class="location-select__wrapper">
     <div class="location-select">
       <select
         :value="currentLocation"
         @change="selectLocation($event.target.value)"
-        class="text-xl font-medium"
       >
         <option
           disabled
@@ -54,21 +53,14 @@ export default class LocationSelect extends Vue {
   display: grid;
   grid-template-areas: "select";
   align-items: center;
+  &__wrapper {
+    @apply w-full absolute flex justify-center p-6;
+  }
 
   select {
-    // A reset of styles, including removing the default dropdown arrow
-    appearance: none;
-    // Additional resets for further consistency
-    background-color: transparent;
-    border: transparent;
-    margin: 0;
-    border-radius: 0.25rem;
-    padding: 0.25rem 1.5rem 0.25rem 0.25rem;
-     cursor: pointer;
-    line-height: 1.1;
-    outline: none;
     grid-area: select;
     color: $clear-text;
+    @apply appearance-none bg-transparent border-transparent m-0 py-1 pl-1 pr-6 outline-none cursor-pointer text-xl font-medium;
   }
   &::after {
     content: "";
@@ -76,7 +68,6 @@ export default class LocationSelect extends Vue {
     height: 0.5rem;
     background-color: $clear-text;
     clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-    box-sizing: border-box;
     grid-area: select;
     justify-self: end;
   }

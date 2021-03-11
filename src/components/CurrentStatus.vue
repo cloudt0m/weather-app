@@ -1,23 +1,23 @@
 <template>
-  <div class="current flex flex-col md:flex-row justify-center items-center h-2/3 md:h-full w-full px-8 py-16 background-clear">
+  <div class="current background-clear">
     <img
-      class="current-icon w-80 h-72 md:w-96 md:h-80 p-6 object-contain max-w-xs"
+      class="current__icon"
       :src="'images/icons/status-' + weatherData.weatherCode + '.svg'"
       alt=""
     >
-    <div class="current-information flex flex-row md:flex-col lg:flex-row">
-      <h2 class="current-temperature text-8xl px-4 md:px-0 font-medium">{{ weatherData.temperature }}<span
+    <div class="current__information">
+      <h2 class="current__temperature">{{ weatherData.temperature }}<span
           v-if="weatherData.temperature"
           class="text-2xl"
-        >℃</span></h2>
-      <div class="current-other-informations flex flex-col justify-center lg:px-6">
-        <h3 class="current-status text-xl font-medium leading-10">{{ weatherData.weather }}</h3>
-        <p class="current-time py-1">{{ nowTime }}</p>
+        >&nbsp;℃</span></h2>
+      <div class="current__other-informations">
+        <h3 class="current__status">{{ weatherData.weather }}</h3>
+        <p class="current__time pb-1">{{ nowTime }}</p>
         <div class="flex flex-row">
-          <div class="current-precipitation flex pr-2">
+          <div class="current__precipitation">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="icon w-5 h-auto"
+              class="icon"
               width="44"
               height="44"
               viewBox="0 0 24 24"
@@ -30,12 +30,12 @@
               <path d="M4 12a8 8 0 0 1 16 0z" />
               <path d="M12 12v6a2 2 0 0 0 4 0" />
             </svg>
-            {{ weatherData.precipitationRate }} %
+            {{ weatherData.precipitationRate }}&nbsp;%
           </div>
-          <div class="current-wind-speed flex pl-2">
+          <div class="current__wind-speed">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="icon w-5 h-auto"
+              class="icon"
               width="44"
               height="44"
               viewBox="0 0 24 24"
@@ -49,7 +49,7 @@
               <path d="M3 12h15.5a2.5 2.5 0 1 1 -2.34 3.24" />
               <path d="M4 16h5.5a2.5 2.5 0 1 1 -2.34 3.24" />
             </svg>
-            {{ weatherData.windSpeed }} <span v-if="weatherData.windSpeed"> m/s</span>
+            {{ weatherData.windSpeed }} <span v-if="weatherData.windSpeed">&nbsp;m/s</span>
           </div>
         </div>
       </div>
@@ -129,15 +129,39 @@ export default class CurrentStatus extends Vue {
 @import "@/assets/scss/style";
 
 .current {
+  @apply flex flex-col md:flex-row justify-center items-center h-2/3 md:h-full w-full px-8 py-16;
   color: $clear-text;
-  &-precipitation {
+  &__icon {
+    @apply w-80 h-72 md:w-96 md:h-80 p-6 object-contain max-w-xs;
+  }
+  &__information {
+    @apply flex flex-row md:flex-col lg:flex-row;
+  }
+  &__temperature {
+    @apply text-8xl px-4 md:px-0 font-normal;
+    font-family: "Oswald", sans-serif;
+  }
+  &__other-informations {
+    @apply flex flex-col justify-center lg:px-6;
+  }
+  &__status {
+    @apply text-xl font-medium leading-10;
+  }
+  &__precipitation {
+    font-family: "Oswald", sans-serif;
     border-color: $clear-text;
     border-right-width: 1px;
+    @apply flex pr-2;
+  }
+  &__wind-speed {
+    font-family: "Oswald", sans-serif;
+    @apply flex pl-2;
   }
 }
 .icon {
   stroke: $clear-text;
   margin-right: 0.25rem;
+  @apply w-5 h-auto;
 }
 .background-clear {
   background: url("/images/clear-bg.svg") center bottom no-repeat;

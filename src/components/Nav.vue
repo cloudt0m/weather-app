@@ -1,5 +1,5 @@
 <template>
-  <nav class="nav absolute w-full hidden">
+  <nav class="nav">
     <ul class="nav-list flex">
       <li>
         <router-link to="/">Home</router-link> |
@@ -20,7 +20,7 @@ export default class Nav extends Vue {}
 <style lang="scss" scoped>
 nav {
   padding: 30px;
-
+  @apply absolute w-full hidden;
   a {
     font-weight: bold;
     color: #2c3e50;
