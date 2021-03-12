@@ -11,10 +11,13 @@
           class="text-2xl"
         >&nbsp;℃</span></h2>
       <div class="current__other-informations">
-        <h3 class="current__status">{{ weatherData.weather }}</h3>
-        <p class="current__time pb-1">{{ nowTime }}</p>
-        <div class="flex flex-row">
-          <div class="current__precipitation">
+        <h3 class="current__weather">{{ weatherData.weather }}</h3>
+        <p class="current__time pb-1">{{ formatDate(weatherData.time) }}</p>
+        <div class="current__line">
+          <div
+            class="current__precipitation"
+            v-if="weatherData.precipitationRate != ' '"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="icon"
@@ -90,11 +93,10 @@ import moment from "moment";
 })
 export default class CurrentStatus extends Vue {
   location!: string;
-  nowTime = "";
+  currentTime = "";
 
-  mounted() {
-    const nowTime = new Date();
-    const weekDay = moment(nowTime).weekday();
+  formatDate(date: string) {
+    const weekDay = moment(date).weekday();
     let chineseWeekDay;
     switch (weekDay) {
       case 0:
@@ -119,9 +121,9 @@ export default class CurrentStatus extends Vue {
         chineseWeekDay = "週六";
         break;
     }
-
-    this.nowTime = moment(nowTime).format("YYYY年MM月DD日 ") + chineseWeekDay;
+    return moment(date).format("YYYY年MM月DD日 ") + chineseWeekDay;
   }
+
 }
 </script>
 
@@ -144,18 +146,25 @@ export default class CurrentStatus extends Vue {
   &__other-informations {
     @apply flex flex-col justify-center lg:px-6;
   }
-  &__status {
+  &__weather {
     @apply text-xl font-medium leading-10;
   }
+  &__line {
+    @apply flex flex-row;
+    > * {
+      @apply flex;
+      font-family: "Oswald", sans-serif;
+      &:first-child {
+        @apply pr-2;
+      }
+      &:nth-child(2) {
+        @apply pl-2;
+      }
+    }
+  }
   &__precipitation {
-    font-family: "Oswald", sans-serif;
     border-color: $clear-text;
     border-right-width: 1px;
-    @apply flex pr-2;
-  }
-  &__wind-speed {
-    font-family: "Oswald", sans-serif;
-    @apply flex pl-2;
   }
 }
 .icon {

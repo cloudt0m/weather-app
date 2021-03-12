@@ -1,28 +1,34 @@
 <template>
   <div class="weekly">
-    <div
+    <template
       v-for="(data, index) in weeklyWeather"
       :key="index"
-      class="weekly-item"
     >
-      <div class="weekly-item__time">{{ data.time }}</div>
-      <div class="weekly-item__weather-icon">
-        <img
-          :src="'images/icons/status-' + data.weatherCode + '.svg'"
-          class="w-16 h-16"
-          alt=""
-        >
+      <div
+        v-if="data.time != currentTime"
+        class="weekly-item"
+        @click="pickDate(data.time)"
+      >
+        <div class="weekly-item__time">{{ formatDate(data.time) }}</div>
+        <div class="weekly-item__weather-icon">
+          <img
+            :src="'images/icons/status-' + data.weatherCode + '.svg'"
+            class="w-16 h-16"
+            alt=""
+          >
+        </div>
+        <div class="weekly-item__temperature">
+          <p class="temperature-amount">{{ data.temperature }}</p>
+          <div class="temperature-unit">℃</div>
+        </div>
       </div>
-      <div class="weekly-item__temperature">
-        <p class="temperature-amount">{{ data.temperature }}</p>
-        <div class="temperature-unit">℃</div>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
-import { WeatherData } from "@/types";
+import { WeeklyWeather } from "@/types";
+import moment from "moment";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -32,9 +38,24 @@ import { Options, Vue } from "vue-class-component";
       type: Array,
     },
   },
+  emits: ["pickDate"],
 })
 export default class WeeklyStatus extends Vue {
-  weeklyWeather: WeatherData[] = [];
+  weeklyWeather: WeeklyWeather[] = [];
+  currentTime = "";
+
+  pickDate(date: string) {
+    this.currentTime = date;
+    this.$emit("pickDate", date);
+  }
+
+  formatDate(date: string): string {
+    return moment(date).format("MM/DD");
+  }
+
+  mounted() {
+    this.currentTime = this.weeklyWeather[0].time;
+  }
 }
 </script>
 
@@ -49,7 +70,7 @@ export default class WeeklyStatus extends Vue {
   background-color: $clear-block;
   color: $clear-text;
   border-color: $clear-bg;
-  @apply flex flex-col md:flex-row flex-1 py-6 md:py-0 md:px-6 border-l-2 border-r-2 md:border-l-0 md:border-r-0 md:border-t-2 md:border-b-2 md:items-center md:justify-between h-full;
+  @apply flex flex-col md:flex-row flex-1 py-6 md:py-0 md:px-6 border-l-2 border-r-2 md:border-l-0 md:border-r-0 md:border-t-2 md:border-b-2 md:items-center md:justify-between h-full cursor-pointer;
   &__time {
     font-family: "Oswald", sans-serif;
     @apply text-center text-lg font-light;

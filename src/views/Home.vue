@@ -5,12 +5,15 @@
       :currentLocation="currentLocation"
       @select="reloadWeatherData($event)"
     ></location-select>
-    <template v-if="weatherData.weeklyWeather.length > 0">
+    <template v-if="weeklyWeather.length > 0">
       <current-status
         :location="currentLocation"
-        :weatherData="weatherData.currentWeather"
+        :weatherData="currentWeather"
       ></current-status>
-      <weekly-status :weeklyWeather="weatherData.weeklyWeather"></weekly-status>
+      <weekly-status
+        :weeklyWeather="weeklyWeather"
+        @pickDate="filterDataByDate($event)"
+      ></weekly-status>
     </template>
   </div>
 </template>
@@ -22,7 +25,7 @@ import LocationSelect from "@/components/LocationSelect.vue";
 import CurrentStatus from "@/components/CurrentStatus.vue";
 import WeeklyStatus from "@/components/WeeklyStatus.vue";
 import WeatherService from "@/services/WeatherService";
-import { WeatherData } from "@/types";
+import { WeeklyWeather } from "@/types";
 
 @Options({
   components: {
@@ -57,22 +60,28 @@ export default class Home extends Vue {
     "屏東縣",
   ];
   currentLocation = "";
-  weatherData: WeatherData = {
-    weeklyWeather: [],
-    currentWeather: {
-      weather: "",
-      weatherCode: "",
-      temperature: "",
-      windSpeed: "",
-      precipitationRate: "",
-    },
+  currentWeather: WeeklyWeather = {
+    time: "",
+    weather: "",
+    weatherCode: "",
+    temperature: "",
+    windSpeed: "",
+    precipitationRate: "",
   };
+  weeklyWeather: WeeklyWeather[] = [];
 
   reloadWeatherData(location: string) {
     this.currentLocation = location;
     WeatherService.getWeatherData(location).then(
-      (data) => (this.weatherData = data)
+      (data) => {
+        this.currentWeather = data[0];
+        this.weeklyWeather = data;
+      }
     );
+  }
+
+  filterDataByDate(date: string) {
+    this.currentWeather = this.weeklyWeather.filter(el => el.time == date)[0];
   }
 
   mounted() {
@@ -84,7 +93,7 @@ export default class Home extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/style';
+@import "@/assets/scss/style";
 
 .home {
   background-color: $clear-bg;

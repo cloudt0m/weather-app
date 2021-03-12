@@ -2,9 +2,7 @@ import {
   CWBData,
   WeeklyWeather,
   PositionData,
-  CWBTime,
-  CurrentWeather,
-  WeatherData,
+  CWBTime
 } from '@/types';
 import axios from 'axios';
 import moment from 'moment';
@@ -51,44 +49,25 @@ export default {
       .catch((error) => console.error(`geolocation error: ${error}`));
   },
 
-  getWeatherData(location: string): Promise<WeatherData> {
+  getWeatherData(location: string): Promise<WeeklyWeather[]> {
     const apiKey = process.env.VUE_APP_CWB_API_KEY;
     const endpoint =
       'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091';
     const elementNames = ['T', 'WS', 'PoP12h', 'Wx'];
-    const filterItem = (
-      data: Array<CWBData>,
-      fieldName: string,
-      weatherOption?: string
-    ) => {
-      const fieldData = data.filter((el) => el.elementName == fieldName)[0]
-        .time[0].elementValue[0].value;
-      // get Wx ID from elementValue
-      if (fieldName == 'Wx') {
-        if (weatherOption == 'code') {
-          return data.filter((el) => el.elementName == fieldName)[0].time[0]
-            .elementValue[1].value;
-        } else {
-          return fieldData;
-        }
-      }
-      return fieldData;
-    };
     const filterWeeklyItems = (
       data: Array<CWBData>,
       elementNames: string[]
     ) => {
-      const today = moment().format('MM/DD');
       const fieldData = elementNames.map((fieldName) => {
         const filteredData: WeeklyWeather[] = data
           .filter((el) => el.elementName == fieldName)[0]
           .time.filter((el: CWBTime, index: number, array: CWBTime[]) => {
-            const time = moment(el.startTime).format('MM/DD');
+            const time = moment(el.startTime).format('YYYY-MM-DD');
 
             // remove today and duplicate date entry
-            if (index > 1 && time != today) {
+            if (index > 0) {
               const prevTime = moment(array[index - 1].startTime).format(
-                'MM/DD'
+                'YYYY-MM-DD'
               );
               if (time != prevTime) {
                 // push current object to prev array
@@ -99,12 +78,12 @@ export default {
               }
             } else {
               // skip first iteration with undefined prevTime
-              return false;
+              return true;
             }
           })
           .map((el: CWBTime) => {
             const obj: { [key: string]: string } = {};
-            const time = moment(el.startTime).format('MM/DD');
+            const time = moment(el.startTime).format('YYYY-MM-DD');
             const value = el.elementValue[0].value;
             
             switch (fieldName) {
@@ -118,6 +97,7 @@ export default {
                 obj.precipitationRate = value;
                 break;
               case 'Wx':
+                obj.weather = el.elementValue[0].value;
                 obj.weatherCode = el.elementValue[1].value;
                 break;
               default:
@@ -153,13 +133,7 @@ export default {
         const weatherData =
           res.data.records.locations[0].location[0].weatherElement;
         const weeklyWeather = filterWeeklyItems(weatherData, elementNames);
-        const currentWeather = {} as CurrentWeather;
-        currentWeather.weather = filterItem(weatherData, 'Wx', 'description');
-        currentWeather.weatherCode = filterItem(weatherData, 'Wx', 'code');
-        currentWeather.temperature = filterItem(weatherData, 'T');
-        currentWeather.precipitationRate = filterItem(weatherData, 'PoP12h');
-        currentWeather.windSpeed = filterItem(weatherData, 'WS');
-        return { weeklyWeather, currentWeather };
+        return weeklyWeather;
       });
   },
 };
