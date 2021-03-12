@@ -72,19 +72,19 @@ export default class Home extends Vue {
 
   reloadWeatherData(location: string) {
     this.currentLocation = location;
-    WeatherService.getWeatherData(location).then(
-      (data) => {
-        this.currentWeather = data[0];
-        this.weeklyWeather = data;
-      }
-    );
+    WeatherService.getWeatherData(location).then((data) => {
+      this.currentWeather = data[0];
+      this.weeklyWeather = data;
+      this.$store.state.isLoading = false;
+    });
   }
 
   filterDataByDate(date: string) {
-    this.currentWeather = this.weeklyWeather.filter(el => el.time == date)[0];
+    this.currentWeather = this.weeklyWeather.filter((el) => el.time == date)[0];
   }
 
   mounted() {
+    this.$store.state.isLoading = true;
     const position = WeatherService.getMyPosition();
     position.then((position) => {
       this.reloadWeatherData(position);

@@ -9,14 +9,21 @@
         >{{ item }}</li>
       </ul>
     </h2>
-    <p></p>
+    <p>{{ message }}</p>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import { mapState } from "vuex";
 
-@Options({})
+@Options({
+  computed: {
+    ...mapState({
+      message: (state: any) => state.msg,
+    }),
+  },
+})
 export default class About extends Vue {
   techLists = [
     "Browser Geolocation API",

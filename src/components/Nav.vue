@@ -55,10 +55,12 @@ nav {
   a {
     font-weight: bold;
     color: $clear-text;
+    font-family: "Oswald", sans-serif;
 
     &.router-link-exact-active {
       color: $clear-active;
     }
+    @apply text-xl;
   }
   span {
     color: $clear-text;
