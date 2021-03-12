@@ -54,12 +54,11 @@ export default class LocationSelect extends Vue {
   grid-template-areas: "select";
   align-items: center;
   &__wrapper {
-    @apply w-full absolute flex justify-center p-6;
+    @apply w-full absolute flex justify-end md:justify-center p-6;
   }
-
   select {
     grid-area: select;
-    color: $clear-text;
+    color: $clear-text  ;
     @apply appearance-none bg-transparent border-transparent m-0 py-1 pl-1 pr-6 outline-none cursor-pointer text-xl font-medium;
   }
   &::after {
