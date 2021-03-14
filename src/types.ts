@@ -11,11 +11,6 @@ export interface WeeklyWeather {
   [key: string]: string;
 }
 
-export interface WeatherData {
-  weeklyWeather: WeeklyWeather[];
-  currentWeather: CurrentWeather;
-}
-
 export interface PositionData {
   formatted_address: string;
   place_id: string;

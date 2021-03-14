@@ -72,6 +72,7 @@ export default class Home extends Vue {
 
   reloadWeatherData(location: string) {
     this.currentLocation = location;
+    this.$store.state.isLoading = true;
     WeatherService.getWeatherData(location).then((data) => {
       this.currentWeather = data[0];
       this.weeklyWeather = data;

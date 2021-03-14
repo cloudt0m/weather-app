@@ -1,8 +1,14 @@
 <template>
   <Nav></Nav>
-  <transition name="loading">  
-    <div class="loading" v-if="isLoading">
-      <img src="images/loading.png" alt="">
+  <transition name="loading">
+    <div
+      class="loading"
+      v-if="isLoading"
+    >
+      <img
+        src="images/loading.png"
+        alt=""
+      >
     </div>
   </transition>
   <router-view />
@@ -16,13 +22,16 @@ import { mapState } from "vuex";
   components: { Nav },
   computed: {
     ...mapState({ isLoading: (state: any) => state.isLoading }),
-  },})
+  },
+})
 export default class App extends Vue {}
 </script>
 <style lang="scss">
-@import '@/assets/scss/style';
+@import "@/assets/scss/style";
 
-html, body, #app {
+html,
+body,
+#app {
   width: 100%;
   height: 100%;
 }
@@ -32,12 +41,16 @@ html, body, #app {
 .loading {
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 11;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent;
   pointer-events: none;
-  transition: 1s ease-out;
+  transition: 0.5s ease-out;
+  background: $clear-bg;
   &-leave-active {
     opacity: 1;
   }

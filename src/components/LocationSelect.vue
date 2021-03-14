@@ -1,6 +1,9 @@
 <template>
   <div class="location-select__wrapper">
-    <div class="location-select">
+    <div
+      class="location-select"
+      v-if="!$store.state.isLoading"
+    >
       <select
         :value="currentLocation"
         @change="selectLocation($event.target.value)"
@@ -58,7 +61,7 @@ export default class LocationSelect extends Vue {
   }
   select {
     grid-area: select;
-    color: $clear-text  ;
+    color: $clear-text;
     @apply appearance-none bg-transparent border-transparent m-0 py-1 pl-1 pr-6 outline-none cursor-pointer text-xl font-medium;
   }
   &::after {
