@@ -12,6 +12,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'About',
     // lazy-loaded when the route is visited.
     component: () => import('../views/About.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    // lazy-loaded when the route is visited.
+    component: () => import('../views/NotFound.vue')
   }
 ]
 
