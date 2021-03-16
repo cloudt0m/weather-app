@@ -1,5 +1,5 @@
 <template>
-  <nav class="nav flex">
+  <nav class="nav flex" v-if="!$store.state.isLoading">
     <button
       class="hamburger pointer-events-auto"
       :class="{ 'is-active': isNavOpened }"
